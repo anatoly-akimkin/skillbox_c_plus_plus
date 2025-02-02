@@ -27,41 +27,77 @@ i_like_underscore@but_its_not_allow_in _this_part.example.com (во второй
 
 // Рекомендации. Активно используйте оператор индексации строки str[i], но помните, что индексы начинаются с нуля, а не с единицы. Создайте отдельные функции, которые выдают первую и вторую части адреса для их последующего анализа. Для валидации отдельных символов внутри части используйте дополнительные строки-словари, состоящие из всех корректных символов для соответствующей части. При разработке вспомогательных функций получения первой и второй части адреса воспользуйтесь циклом, который проверяет текущий символ. Если символ равен ‘@’, значит мы нашли границу между частями адреса. В функции нахождения первой части в этом месте надо остановиться и вернуть все символы, что были раньше (их можно накапливать в std::string при помощи оператора +=). Во второй функции все символы после ‘@’ тем же оператором добавляются к результату. Строка-словарь — это строка, которая в нашем случае содержит весь английский алфавит и символы. Каждый символ адреса надо сравнить с каждым символом из этого списка «допустимых символов» в цикле. В этом задании очень важно разбить код на отдельные функции, каждая из которых делает небольшую часть работы. Что оценивается. Корректные результаты валидации адресов электронной почты. Должны устанавливаться как валидные адреса, так и невалидные.
 
-bool symbol_check(char symbol, std::string allowed_chars) 
+std::string local_part(std::string email)
 {
-    for (int i = 0; i < allowed_chars.length(); i++)
+    std::string first_part = "";
+    for (int i = 0; i < email.length(); i++)
     {
-        if (symbol == allowed_chars[i]) return true;
-    } 
-
-    return false;
+        if (email[i] == '@') break;
+        
+        first_part += email[i];
+    }
+    return first_part;
 }
 
-bool first_part_check(std::string email, int boundary)
+bool local_part_check(std::string first_part)
 {
     std::string allowed_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-.!#$%&'*+-/=?^_`{|}~";
-    if (boundary == 0 || boundary > 64 || email[0] == '.') return false;
 
-    for (int i = 0; i < boundary; i++)
+    if (first_part.length() < 1 || first_part.length() > 64 || first_part[0] == '.')
+        return false;
+    
+    for (int i = 0; i < first_part.length(); i++)
     {
-        if (email[i] == '.' && email[i+1] == '.') return false;      
-        bool is_allowed = symbol_check(email[i], allowed_chars);
-        if (!is_allowed) return false; 
+        bool is_allowed = false;
+
+        for (int c = 0; c < allowed_chars.length(); c++)
+        {
+            if (first_part[i] == allowed_chars[c]) 
+            {
+                is_allowed = true;
+                break;
+            }
+        }
+        if (!is_allowed) return is_allowed;
+
+        if (i > 0 && first_part[i] == '.' && first_part[i-1] == '.')
+            return false;
     }
 
     return true;
 }
 
-bool second_part_check(std::string email, int boundary)
+std::string domain_part(std::string email)
+{
+    std::string second_part = "";
+    bool d_part = false;
+    for (int i = 0; i < email.length(); i++)
+    {
+        if (d_part) second_part += email[i];
+        if (email[i] == '@') d_part = true;
+    }
+    return second_part;
+}
+
+bool domain_part_check(std::string second_part)
 {
     std::string allowed_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-.";
-    if (email.length() - boundary == 1 || email.length() - boundary > 64 || email[email.length()-1] == '.') return false;
 
-    for (int i = boundary + 1; i < email.length(); i++)
+    if (second_part.length() < 1 || second_part.length() > 63 || second_part[-1] == '.')
+        return false;
+    
+    for (int i = 0; i < second_part.length(); i++)
     {
-        if (email[i-1] == '.' && email[i] == '.') return false;      
-        bool is_allowed = symbol_check(email[i], allowed_chars);
-        if (!is_allowed) return false; 
+        bool is_allowed = false;
+
+        for (int c = 0; c < allowed_chars.length(); c++)
+        {
+            if (second_part[i] == allowed_chars[c]) is_allowed = true;
+        }
+        if (!is_allowed) return is_allowed;
+        
+        if ((i > 1) && second_part[i] == '.' && second_part[i-1] == '.')
+            return false;
     }
 
     return true;
@@ -70,7 +106,7 @@ bool second_part_check(std::string email, int boundary)
 int main() 
 {
     std::string email;
-    while (true)
+    while(true)
     {
         email = "";
         std::cout << "Enter email address: ";
@@ -82,7 +118,7 @@ int main()
             return 0;
         }
 
-        int boundary = email.find('@');
-        std::cout << (((boundary != -1) && first_part_check(email, boundary) && second_part_check(email, boundary))? "Yes" : "No") << std::endl;
+        std::cout << ((local_part_check(local_part(email)) && domain_part_check(domain_part(email)))? "Yes" : "No") 
+            << std::endl;
     }
 }
