@@ -18,16 +18,31 @@ int main()
 
     std::cout << "Input vector size: ";
     std::cin >> size;
+    if (size <= 0 || std::cin.fail()) 
+    {
+        std::cerr << "The vector size must be a positive integer.\n";
+        return 1;
+    }
     std::vector<int> vec(size);
 
-    std::cout << "Input numbers: ";
+    std::cout << "Input " << size << " numbers: ";
     for (int i = 0; i < vec.size(); i++)
     {
         std::cin >> vec[i];
+        if (std::cin.fail())
+        {
+            std::cerr << "Integer input expected.";
+            return 1;
+        }
     }
     
     std::cout << "Input number to delete: ";
     std::cin >> num;
+    if (std::cin.fail())
+    {
+        std::cerr << "Integer input expected.";
+        return 1;
+    }
 
     for (int i = vec.size()-1; i >= 0; i--)
     {

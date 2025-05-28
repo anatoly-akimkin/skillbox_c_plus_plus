@@ -27,18 +27,34 @@ int main()
 {
     std::vector<int> db(20);
     int pointer = 0;
+    int count = 0;
 
     while (true)
     {
         int num;
         std::cout << "input number: ";
         std::cin >> num;
-
+        if (std::cin.fail())
+        {
+            std::cerr << "Integer input expected.";
+            return 1;
+        }
+        
         if (num == -1)
         {
-            for(int i = 0; i < db.size(); i++)
+            if (count == 20)
             {
-                std::cout << db[i + pointer - ((i + pointer < 20)? 0 : 20)] << " ";
+                for (int i = 0; i < db.size(); i++)
+                {
+                    std::cout << db[(i + pointer) % 20] << " ";
+                }
+            }
+            else
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    std::cout << db[i] << " ";
+                }
             }
             std::cout << std::endl;
         }
@@ -46,6 +62,7 @@ int main()
         {
             db[pointer] = num;
             pointer = (pointer == 19)? pointer-19 : pointer+1;
+            if (count < 20) count++;
         }
         
     }

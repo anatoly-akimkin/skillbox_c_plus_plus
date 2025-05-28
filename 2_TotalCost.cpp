@@ -18,25 +18,27 @@ int main()
     std::cout << "Prices: ";
     for (int i = 0; i < prices.size(); i++)
     {
-        std::cout << prices[i] << " ";
+        std::cout << " | " << prices[i];
     }
-    std::cout << std::endl;
+    std::cout << " |\n\n";
 
     std::vector<int> items {1, 1, 0, 3, -1, 7};
     std::cout << "Items: ";
     for (int i = 0; i < items.size(); i++)
     {
-        std::cout << items[i] << " ";
+        std::cout << " | " << items[i];
     }
-    std::cout << std::endl;
+    std::cout << " |\n\n";
 
     float sum = 0.f;
+    int count = 0;
 
     for (int i = 0; i < items.size(); i++)
     {
         if (items[i] >= 0 && items[i] < prices.size())
         {
             sum += prices[items[i]];
+            count++;
         }
         else
         {
@@ -44,5 +46,6 @@ int main()
         }
     }
 
-    std::cout << "Total cost: " << sum;
+    std::cout << "\nTotal items: " << count
+              << "\nTotal cost: " << sum;
 }
