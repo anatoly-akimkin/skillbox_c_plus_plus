@@ -71,19 +71,21 @@ int input_val()
 
 void burst(bool m[][12])
 {
-    int x[2], y[2];
+    int x1, x2, y1, y2;
     std::cout << "Enter the coordinates of the affected area.\n";
     std::cout << "From - To:\n";
-    x[0] = input_val();
-    y[0] = input_val();
-    x[1] = input_val();
-    y[1] = input_val();
+    x1 = input_val();
+    y1 = input_val();
+    x2 = input_val();
+    y2 = input_val();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    if (x2 < x1) std::swap(x1, x2);
+    if (y2 < y1) std::swap(y1, y2);
 
     int count = 0;
-    for (int i = (std::min(y[0], y[1])); i < (std::max(y[0], y[1]) + 1); i++)
+    for (int i = y1; i < (y2 + 1); i++)
     {
-        for (int j = (std::min(x[0], x[1])); j < (std::max(x[0], x[1]) + 1); j++)
+        for (int j = x1; j < (x2 + 1); j++)
         {
             if (m[i][j]) 
             {

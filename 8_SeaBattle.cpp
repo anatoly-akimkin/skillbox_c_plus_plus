@@ -45,16 +45,6 @@ void print_matrix(int matrix[][10])
                             std::cout << "X ";
                             break;
                         }
-                        // case 0:
-                        // {
-                        //     std::cout << "~ ";
-                        //     break;
-                        // }
-                        // case 1:
-                        // {
-                        //     std::cout << "@ ";
-                        //     break;
-                        // }
                         default:
                             std::cout << "~ ";
                             break;
@@ -117,18 +107,22 @@ bool valid_point(int matrix[][10], int x, int y)
 
 bool valid_line(int matrix[][10], int a1, int a2, int b1, int b2, int length)
 {
-    if (a1 == a2 ^ b1 == b2)
+    // Checking for verticality / horizontality
+    if (a1 == a2 ^ b1 == b2) 
     {
-        if ((b2 - b1 + 1) == length)
+        // Ship length
+        if ((b2 - b1 + 1) == length) 
         {
             bool free_space = true;
+            // Sequential checking of points
             for (int i = 0; free_space && i < length; i++) 
             {
                 if (not valid_point(matrix, (a1), b1+i)) free_space = false;
             }
+            // Ship placement
             if (free_space) 
             {
-                for (int i = 0; i < length; i++) matrix[b1+i][a1] = 1;
+                for (int i = 0; i < length; i++) matrix[b1+i][a1] = 1; 
                 return true;
             }
             else 
@@ -280,7 +274,9 @@ int main()
     {
         std::cout << "__________________________________\n";
         std::cout << "\n>> PLAYER " << player+1 << " <<  |  Your HP: " << player_health[player] << std::endl;
-        player = (player == 0)? 1 : 0;
+        
+        // Switch to enemy
+        player = (player == 0)? 1 : 0; 
         std::cout << "                |  Target's HP: " << player_health[player] << std::endl;
         std::cout << "__________________________________\n\n";
         shoot(((player == 0)? field_1 : field_2), player, player_health);
