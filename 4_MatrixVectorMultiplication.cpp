@@ -87,7 +87,7 @@ int main()
         float sum = 0;
         for (int j = 0; j < 4; j++)
         {
-            sum += a[i][j] * b[i];
+            sum += a[i][j] * b[j];
         }
         c[i] = sum;
     }
