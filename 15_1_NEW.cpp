@@ -3,17 +3,18 @@
 // Наибольшая сумма последовательных элементов находится между индексами 3 и 6: {4, −1 ,2 ,1}, сумма = 6. Необходимо вывести 3 и 6.
 
 #include <iostream>
+#include <limits>
 #include <vector>
 
 int input_int()
 {
     int val;
     std::cin >> val;
-    while(std::cin.fail())
+    while (std::cin.fail())
     {
         std::cerr << "Integer input expected.\n";
         std::cin.clear();
-        while(std::cin.peek() != ' ' && std::cin.peek() != '\n') std::cin.ignore();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cin >> val;
     }
     return val;
@@ -30,23 +31,13 @@ void print_vec(std::vector<int> &vec, int size, int i = 0)
     std::cout << vec[end_i] << "}";
 }
 
-int vec_sum(std::vector<int> &vec, int size, int start_pos = 0)
-{
-    int sum = 0;
-    for (int i = start_pos; i < (start_pos + size); i++)
-    {
-        sum += vec[i];
-    }
-    return sum;
-}
-
 int main()
 {
     std::cout << "Enter the array size: ";
     int size = input_int(); // 9
     while (size <= 0)
     {
-        std::cout << "The size must be greater than zero.\n";
+        std::cerr << "The size must be greater than zero.\n";
         size = input_int();
     }
 
@@ -56,30 +47,34 @@ int main()
     {
         vec[i] = input_int(); // -2 1 -3 4 -1 2 1 -5 4
     }
-
-    int max_sum = vec_sum(vec, size);
-    int start_i = 0, end_i = size-1;
-
+    //std::vector<int> vec {-2, 1, -3, 4, -1, 2, 1, -5, 4};
     
-    int elements = size-1; // number of elements in subarray
-    while (elements > 0)
+    int start_i = 0, subArrSize = 0, res = 0;
+
+    int curArrSize = 0, curMaxSum = 0;
+    for (int i = 0; i < size; i++) 
     {
-        // checking subarrays of a given size
-        for (int i = 0; i <= size - elements; i++) 
+        if (curMaxSum + vec[i] > vec[i])
         {
-            int sum = vec_sum(vec, elements, i);
-            if (sum >= max_sum)
-            {
-                max_sum = sum;
-                start_i = i;
-                end_i = i + elements-1;
-            }
+            curMaxSum += vec[i];
+            curArrSize++;
         }
-        elements--;
+        else
+        {
+            curMaxSum = vec[i];
+            curArrSize = 1;
+        }
+
+        if (res < curMaxSum)
+        {
+            start_i = i - (curArrSize-1);
+            subArrSize = curArrSize;
+            res = curMaxSum;
+        } 
     }
 
     std::cout << "The largest sum of consecutive elements is between indices " 
-                << start_i << " and " << end_i << ": ";
-    print_vec(vec, (end_i - start_i + 1), start_i);
-    std::cout << ", sum = " << max_sum << ".";
+                << start_i << " and " << (start_i + subArrSize-1) << ": ";
+    print_vec(vec, subArrSize, start_i);
+    std::cout << ", sum = " << res << ".";
 }

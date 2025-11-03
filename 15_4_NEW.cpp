@@ -6,16 +6,17 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <limits>
 
 int input_int()
 {
     int val;
     std::cin >> val;
-    while(std::cin.fail())
+    while (std::cin.fail())
     {
         std::cerr << "Integer input expected.\n";
         std::cin.clear();
-        while(std::cin.peek() != ' ' && std::cin.peek() != '\n') std::cin.ignore();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cin >> val;
     }
     return val;
@@ -27,62 +28,64 @@ int main()
     int size = input_int(); // 6
     while (size <= 0)
     {
-        std::cout << "The size must be greater than zero.\n";
+        std::cerr << "The size must be greater than zero.\n";
         size = input_int();
     }
 
     std::vector<int> vec(size);
     std::cout << "Enter an array of integers sorted in ascending order: "; // -100 -50 -5 1 10 15
     bool not_sorted;
-    int start; // Index of the first positive value
     do
     {
         not_sorted = false;
-        while(std::cin.peek() != '\n') std::cin.ignore();
-        for (int i = 0; i < size; i++)
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        vec[0] = input_int();
+        for (int i = 1; i < size; ++i)
         {
             vec[i] = input_int();
-            if (i > 0 && vec[i] < vec[i-1]) not_sorted = true;
-            if (i > 0 && vec[i] >= 0 && vec[i-1] < 0 ) start = i;
+            if (vec[i] < vec[i-1]) not_sorted = true;
         }
-        if (not_sorted) std::cout << "The array is not sorted. Try again.\n";
+        if (not_sorted) std::cerr << "The array is not sorted. Try again.\n";
     } while (not_sorted);
 
-    if (vec[0] >= 0) 
+    
+    int start = size-1; // Index of the first positive value
+
+    for (int i = 0; i < size; ++i)
     {
-        start = 0;
-    }
-    else if (vec[size-1] < 0)
-    {
-        start = size-1;
+        if (vec[i] >= 0)
+        {
+            start = i;
+            break;
+        }
     }
     
     std::cout << "Array sorted in ascending order of absolute values:\n";
     std::cout << vec[start] << " ";
-    for (int r = 0, l = 0; r+l < size-1;)
+    for (int r = (size-1 - start), l = start; r+l > 0;)
     {
-        if (start+r+1 < size && start-l-1 >= 0) // If there are both positive and negative values ​​to print
+        if (r > 0 && l > 0) // If there are both positive and negative values ​​to print
         {
-            if (vec[start+r+1] < std::abs(vec[start-l-1]))
+            if (vec[size-r] < std::abs(vec[l-1]))
             {
-                std::cout << vec[start+r+1] << " ";
-                r++;
+                std::cout << vec[size-r] << " ";
+                --r;
             }
             else
             {
-                std::cout << vec[start-l-1] << " ";
-                l++;
+                --l;
+                std::cout << vec[l] << " ";
             }
         }
-        else if (start+r+1 < size) // If the remaining values ​​are positive
+        else if (r > 0) // If the remaining values ​​are positive
         {
-            std::cout << vec[start+r+1] << " ";
-            r++;
+            std::cout << vec[size-r] << " ";
+            --r;
         }
         else // If the remaining values ​​are negative
         {
-            std::cout << vec[start-l-1] << " ";
-            l++;
+            --l;
+            std::cout << vec[l] << " ";
         }
     }
 }
