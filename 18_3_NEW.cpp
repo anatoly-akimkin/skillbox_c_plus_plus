@@ -18,7 +18,7 @@ void ll_input(long long &val)
     }
 }
 
-void evendigits(long long &n, int &ans)
+void evendigits(long long n, int &ans)
 {
     if (n % 2 == 0) ++ans;
     n /= 10;
@@ -33,6 +33,7 @@ int main()
     
     int ans = 0;
     evendigits(n, ans);
+    std::cout << n << std::endl;
 
     std::cout << "There are " << ans << " even digits in the number.";
 }
