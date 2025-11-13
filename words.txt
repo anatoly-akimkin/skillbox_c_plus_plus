@@ -1,0 +1,26 @@
+how to read from a file in c++
+last updated 23 jul 2025
+reading from a file means retrieving the data stored inside a file 
+c++ file handling allows us to read different files from our c programs 
+this data can be taken as input and stored in the program for processing 
+generally files can be classified in two types
+
+text file 
+files that contains data in the form of text
+binary file 
+files that contains data in raw binary form
+the method of reading data from these files also differs from one another 
+let's see how to read each type of files
+
+read from a text file
+to read the content of this text file in c++ we have to first create an input file stream std::ifstream to the file in default flags
+after that we can use any input function such as std::getline() or >> operator to read the textual data and store it in the string variable 
+we generally prefer getline() as it reads till the newline or any specified character is found
+
+
+read from a binary file
+binary files in c++ are used to store data in the binary form 0s and 1s
+to read the data of binary file we need to open the input file stream object with the std::ios::binary flag
+the getline() function cannot read the data from the binary files so we use the specialized function read() of ifstream class that reads the given block of data from the file stream and return it as a character array which can be converted to the required type using reinterprit_cast
+
+one thing we can infer from here is that you need to know about the format or type of the contents stored in the binary file to successfully read it. it is not true for text file though, as we can read everything present in it as character

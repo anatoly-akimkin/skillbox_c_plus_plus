@@ -1,0 +1,1 @@
+An object that progressively provides access to each item of a collection, in order
