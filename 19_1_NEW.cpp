@@ -8,19 +8,18 @@ int word_count(std::ifstream &text, const std::string &word)
 {
     int counter = 0;
     std::string current_word;
-    while (!text.eof())
-    {
-        
-        text >> current_word;
-        if (word == current_word) ++counter;
-    }
+    while (text >> current_word) if (word == current_word) ++counter;
     return counter;
 }
 
 int main()
 {
+    std::string path;
+    std::cout << "Enter the path to the file.\n--> "; // C:\code\module19\words.txt
+    std::getline(std::cin, path);
+
     std::ifstream text;
-    text.open("C:\\code\\module19\\words.txt");
+    text.open(path);
     if (!text.is_open())
     {
         std::cerr << "Failed to open a file.\n";

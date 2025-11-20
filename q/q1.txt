@@ -1,1 +1,0 @@
-A data type consisting of a set of named values

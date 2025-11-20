@@ -1,1 +1,0 @@
-A method of solving a computational problem using functions that call themselves from within their own code

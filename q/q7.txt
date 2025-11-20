@@ -1,1 +1,0 @@
-The order in which an element added to or removed from a stack

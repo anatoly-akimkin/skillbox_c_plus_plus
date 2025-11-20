@@ -1,1 +1,0 @@
-А callable unit of software logic that has a well-defined interface and behavior and can be invoked multiple times
