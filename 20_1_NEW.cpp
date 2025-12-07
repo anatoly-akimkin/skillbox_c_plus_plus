@@ -34,7 +34,7 @@ bool valid_date(const std::string &date)
     if (date.length() != 10) return bad_date();
     for (int i = 0; i < 10; ++i)
     {
-        if ((i != 2 && i != 5 && date[i] < 48 && date[i] > 57)
+        if ((i != 2 && i != 5 && (date[i] < 48 || date[i] > 57))
             || ((i == 2 || i == 5) && date[i]  != '.')) return bad_date();
     }
     
