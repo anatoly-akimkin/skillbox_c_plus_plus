@@ -163,7 +163,7 @@ bool SaveToFile(const std::string &kPath, const std::vector<Character> &kCharact
         file.write((char*) &name_len, sizeof(name_len));
         file.write(kCharacters[i].name.c_str(), name_len);
         file.write((char*) &kCharacters[i].relationship, sizeof(kCharacters[i].relationship));
-        file.write((char*) &kCharacters[i].health, sizeof(&kCharacters[i].health));
+        file.write((char*) &kCharacters[i].health, sizeof(kCharacters[i].health));
         file.write((char*) &kCharacters[i].armor, sizeof(kCharacters[i].armor));
         file.write((char*) &kCharacters[i].damage, sizeof(kCharacters[i].damage));
         file.write((char*) &kCharacters[i].position.x, sizeof(kCharacters[i].position.x));
@@ -185,9 +185,9 @@ bool LoadFromFile(const std::string &kPath, std::vector<Character> &rCharacters)
         int name_len;
         file.read((char*) &name_len, sizeof(name_len));
         c.name.resize(name_len);
-        file.read((char*) c.name.c_str(), name_len);
+        file.read(&c.name[0], name_len);
         file.read((char*) &c.relationship, sizeof(c.relationship));
-        file.read((char*) &c.health, sizeof(&c.health));
+        file.read((char*) &c.health, sizeof(c.health));
         file.read((char*) &c.armor, sizeof(c.armor));
         file.read((char*) &c.damage, sizeof(c.damage));
         file.read((char*) &c.position.x, sizeof(c.position.x));
